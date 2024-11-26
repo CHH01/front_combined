@@ -8,7 +8,7 @@ const ChatListScreen = ({ navigation }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>채팅</Text>
-        <Pressable onPress={() => navigation.navigate('NewChat')}>
+        <Pressable onPress={() => navigation.navigate('CreateGroupChat')}>
           <Icon name="edit" size={24} color="#333" />
         </Pressable>
       </View>

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const CreateGroupChatScreen = () => {
+const CreateGroupChatScreen = ({ navigation }) => {
     const [groupName, setGroupName] = useState('');
     const [inviteMessage, setInviteMessage] = useState('');
     const [selectedFriends, setSelectedFriends] = useState([]);
@@ -23,15 +23,17 @@ const CreateGroupChatScreen = () => {
     const createGroupChat = () => {
         // Logic để tạo nhóm chat
         alert(`그룹 채팅이 생성되었습니다: ${groupName}`);
+        // 이전 화면으로 돌아가기
+        navigation.goBack();
     };
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>그룹 채팅 생성 페이지</Text>
-            <Text style={styles.label}>그룹 이름 설정</Text>
+            <Text style={styles.label}>채팅방 이름 설정</Text>
             <TextInput
                 style={styles.input}
-                placeholder="그룹 이름을 입력하세요"
+                placeholder="채팅방 이름을 입력하세요"
                 value={groupName}
                 onChangeText={setGroupName}
             />

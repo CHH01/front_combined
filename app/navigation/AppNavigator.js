@@ -52,6 +52,17 @@ import MentoringScreen from '../screens/Group/MentoringScreen';
 import CreateQuestionScreen from '../screens/Community/CreateQuestionScreen';
 import QuestionDetailScreen from '../screens/Community/QuestionDetailScreen';
 import StudyMaterialDetailScreen from '../screens/Study/StudyMaterialDetailScreen';
+import FileShareScreen from '../screens/Chat/FileShareScreen';
+import CreateGroupChatScreen from '../screens/Chat/CreateGroupChatScreen';
+import AddFriendScreen from '../screens/Friends/AddFriendScreen';
+import GroupCommunicationScreen from '../screens/Group/GroupCommunicationScreen';
+import PerformanceAnalysisScreen from '../screens/Group/PerformanceAnalysisScreen';
+import QuizAndTestScreen from '../screens/Group/QuizAndTestScreen';
+import StudyMaterialManagementScreen from '../screens/Group/StudyMaterialManagementScreen';
+import LearningResourceCenterScreen from '../screens/Group/LearningResourceCenterScreen';
+import GroupPerformanceAndRewardsScreen from '../screens/Group/GroupPerformanceAndRewardsScreen';
+import GroupScheduleManagementScreen from '../screens/Group/GroupScheduleManagementScreen';
+
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -150,6 +161,9 @@ const ChatStack = () => {
       <Stack.Screen name="ChatList" component={ChatListScreen} />
       <Stack.Screen name="FriendsList" component={FriendsListScreen} />
       <Stack.Screen name="FriendProfile" component={FriendProfileScreen}/>
+      <Stack.Screen name="FileShare" component={FileShareScreen} />
+      <Stack.Screen name="CreateGroupChat" component={CreateGroupChatScreen} />
+      <Stack.Screen name="AddFriend" component={AddFriendScreen} />
     </Stack.Navigator>
   );
 };
@@ -170,6 +184,13 @@ const GroupStack = () => {
       <Stack.Screen name="MemberInvite" component={MemberInviteScreen} />
       <Stack.Screen name="MemberActivity" component={MemberActivityScreen} />
       <Stack.Screen name="Mentoring" component={MentoringScreen} />
+      <Stack.Screen name="GroupCommunication" component={GroupCommunicationScreen} />
+      <Stack.Screen name="PerformanceAnalysis" component={PerformanceAnalysisScreen} />
+      <Stack.Screen name="QuizAndTest" component={QuizAndTestScreen} />
+      <Stack.Screen name="StudyMaterialManagement" component={StudyMaterialManagementScreen} />
+      <Stack.Screen name="LearningResourceCenter" component={LearningResourceCenterScreen} />
+      <Stack.Screen name="GroupPerformanceAndRewards" component={GroupPerformanceAndRewardsScreen} />
+      <Stack.Screen name="GroupScheduleManagement" component={GroupScheduleManagementScreen} />
     </Stack.Navigator>
   );
 };

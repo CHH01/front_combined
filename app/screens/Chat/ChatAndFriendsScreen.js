@@ -26,7 +26,7 @@ const ChatAndFriendsScreen = ({ navigation }) => {
           slideAnimation={slideAnimation}
         />
         {selectedTab === 'chats' ? (
-          <Pressable onPress={() => navigation.navigate('NewChat')}>
+          <Pressable onPress={() => navigation.navigate('CreateGroupChat')}>
             <Icon name="edit" size={24} color="#333" />
           </Pressable>
         ) : (

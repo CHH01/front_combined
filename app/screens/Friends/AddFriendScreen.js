@@ -1,10 +1,11 @@
 // 1.친구 추가 페이지 ok
 //VB
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/Feather';
 
-const AddFriendScreen = () => {
+const AddFriendScreen = ({ navigation }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [friends, setFriends] = useState([
         { id: '1', name: '친구1', phone: '010-1234-5678' },
@@ -23,7 +24,15 @@ const AddFriendScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>새 친구 추가 페이지</Text>
+            <View style={styles.header}>
+                <TouchableOpacity 
+                    style={styles.backButton} 
+                    onPress={() => navigation.goBack()}
+                >
+                    <Ionicons name="arrow-back" size={24} color="black" />
+                </TouchableOpacity>
+                <Text style={styles.title}>친구 추가 페이지</Text>
+            </View>
             <TextInput
                 style={styles.searchInput}
                 placeholder="ID/전화번호로 친구 검색"
@@ -52,10 +61,21 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: '#fff',
     },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    backButton: {
+        padding: 10,
+        position: 'absolute',
+        left: 0,
+        zIndex: 1,
+    },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 20,
+        flex: 1,
         textAlign: 'center',
     },
     searchInput: {

@@ -18,68 +18,72 @@ const GroupScreen = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
 
-            {/* Thanh tìm kiếm */}
-            <View style={styles.searchContainer}>
-                <Ionicons name="search" size={18} color="gray" />
-                <TextInput 
-                    style={styles.searchInput}
-                    placeholder="그룹 검색"
-                    placeholderTextColor="gray"
-                />
-            </View>
-
-            {/* Danh sách nhóm */}
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>그룹 추천</Text>
-                <ScrollView>
-                    <GroupItem 
-                        title="선문대학교"
-                        members="22.6K Members"
+            <ScrollView 
+                showsVerticalScrollIndicator={false}
+            >
+                {/* Thanh tìm kiếm */}
+                <View style={styles.searchContainer}>
+                    <Ionicons name="search" size={18} color="gray" />
+                    <TextInput 
+                        style={styles.searchInput}
+                        placeholder="그룹 검색"
+                        placeholderTextColor="gray"
                     />
-                    <GroupItem 
-                        title="모바일 프로젝트"
-                        members="2.3K Members"
-                    />
-                    <GroupItem 
-                        title="천안시 친구들"
-                        members="11.2K Members"
-                    />
-                </ScrollView>
-            </View>
+                </View>
 
-            {/* Các section khác */}
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>나의 그룹</Text>
-                <TouchableOpacity 
-                    style={styles.viewAllButton} 
-                    onPress={() => navigation.navigate('MyGroup')}  
-                >
-                    <Text style={styles.viewAllText}>확인</Text>
-                    <Ionicons name="chevron-forward" size={20} color="gray" />
-                </TouchableOpacity>
-            </View>
+                {/* Danh sách nhóm */}
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>그룹 추천</Text>
+                    <ScrollView>
+                        <GroupItem 
+                            title="선문대학교"
+                            members="22.6K Members"
+                        />
+                        <GroupItem 
+                            title="모바일 프로젝트"
+                            members="2.3K Members"
+                        />
+                        <GroupItem 
+                            title="천안시 친구들"
+                            members="11.2K Members"
+                        />
+                    </ScrollView>
+                </View>
 
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>최근 활동</Text>
-                <TouchableOpacity 
-                    style={styles.viewAllButton}
-                    onPress={() => navigation.navigate('GroupActivity')}
-                >
-                    <Text style={styles.viewAllText}>확인</Text>
-                    <Ionicons name="chevron-forward" size={20} color="gray" />
-                </TouchableOpacity>
-            </View>
+                {/* Các section khác */}
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>나의 그룹</Text>
+                    <TouchableOpacity 
+                        style={styles.viewAllButton} 
+                        onPress={() => navigation.navigate('MyGroup')}  
+                    >
+                        <Text style={styles.viewAllText}>확인</Text>
+                        <Ionicons name="chevron-forward" size={20} color="gray" />
+                    </TouchableOpacity>
+                </View>
 
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>AI 기반 그룹 매칭</Text>
-                <TouchableOpacity 
-                    style={styles.viewAllButton}
-                    onPress={() => navigation.navigate('AIGroupMatching')}
-                >
-                    <Text style={styles.viewAllText}>확인</Text>
-                    <Ionicons name="chevron-forward" size={20} color="gray" />
-                </TouchableOpacity>
-            </View>
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>최근 활동</Text>
+                    <TouchableOpacity 
+                        style={styles.viewAllButton}
+                        onPress={() => navigation.navigate('GroupActivity')}
+                    >
+                        <Text style={styles.viewAllText}>확인</Text>
+                        <Ionicons name="chevron-forward" size={20} color="gray" />
+                    </TouchableOpacity>
+                </View>
+
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>AI 기반 그룹 매칭</Text>
+                    <TouchableOpacity 
+                        style={styles.viewAllButton}
+                        onPress={() => navigation.navigate('AIGroupMatching')}
+                    >
+                        <Text style={styles.viewAllText}>확인</Text>
+                        <Ionicons name="chevron-forward" size={20} color="gray" />
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
         </SafeAreaView>
     );
 };
