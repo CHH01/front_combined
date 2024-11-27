@@ -99,22 +99,20 @@ const ChatRoomScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <Pressable onPress={() => navigation.goBack()}>
-            <Icon name="arrow-left" size={24} color="#333" />
-          </Pressable>
-          <Text style={styles.headerTitle}>알고리즘 스터디</Text>
-        </View>
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          <Icon name="arrow-left" size={24} color="#333" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>알고리즘 스터디</Text>
         <View style={styles.headerRight}>
-          <Pressable 
+          <TouchableOpacity 
             style={styles.headerIcon} 
             onPress={() => setSearchVisible(true)}
           >
             <Icon name="search" size={24} color="#333" />
-          </Pressable>
-          <Pressable onPress={() => navigation.navigate('ChatRoomSettings')}>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('ChatRoomSettings')}>
             <Icon name="settings" size={24} color="#333" />
-          </Pressable>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -257,24 +255,25 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
   },
-  headerLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  backButton: {
+    width: 80,
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    marginLeft: 15,
+    textAlign: 'center',
+    flex: 1,
   },
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
+    width: 80,
   },
   headerIcon: {
     marginRight: 15,

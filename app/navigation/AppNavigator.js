@@ -62,8 +62,13 @@ import StudyMaterialManagementScreen from '../screens/Group/StudyMaterialManagem
 import LearningResourceCenterScreen from '../screens/Group/LearningResourceCenterScreen';
 import GroupPerformanceAndRewardsScreen from '../screens/Group/GroupPerformanceAndRewardsScreen';
 import GroupScheduleManagementScreen from '../screens/Group/GroupScheduleManagementScreen';
-
-
+import LevelDetailScreen from '../screens/Study/LevelDetailScreen';
+import AchievementScreen from '../screens/Study/AchievementScreen';
+import RegisterMentorScreen from '../screens/Community/RegisterMentorScreen';
+import ChatRoomMembersScreen from '../screens/Chat/ChatRoomMembersScreen';
+import InviteMembersScreen from '../screens/Chat/InviteMembersScreen';
+import ChatRoomDisplayModeScreen from '../screens/Chat/ChatRoomDisplayModeScreen';
+import ChatBackupRestoreScreen from '../screens/Chat/ChatBackupRestoreScreen';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -147,6 +152,9 @@ const StudyStack = () => {
       <Stack.Screen name="AddGoal" component={AddGoalScreen} />
       <Stack.Screen name="EditGoal" component={EditGoalScreen} />
       <Stack.Screen name="Schedule" component={ScheduleScreen} />
+      <Stack.Screen name="LevelDetail" component={LevelDetailScreen} />
+      <Stack.Screen name="Achievement" component={AchievementScreen} />
+      <Stack.Screen name="RegisterMentor" component={RegisterMentorScreen} />
     </Stack.Navigator>
   );
 };
@@ -164,6 +172,10 @@ const ChatStack = () => {
       <Stack.Screen name="FileShare" component={FileShareScreen} />
       <Stack.Screen name="CreateGroupChat" component={CreateGroupChatScreen} />
       <Stack.Screen name="AddFriend" component={AddFriendScreen} />
+      <Stack.Screen name="ChatRoomMembers" component={ChatRoomMembersScreen} /> 
+      <Stack.Screen name="InviteMembers" component={InviteMembersScreen} />
+      <Stack.Screen name="ChatRoomDisplayMode" component={ChatRoomDisplayModeScreen} />
+      <Stack.Screen name="ChatBackupRestore" component={ChatBackupRestoreScreen} />
     </Stack.Navigator>
   );
 };

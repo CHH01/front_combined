@@ -8,11 +8,15 @@ import {
   Modal,
   TextInput,
   Switch,
-  Platform
+  Platform,
+  Dimensions
 } from 'react-native';
-import { Calendar } from 'react-native-calendars';
+import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import Icon from 'react-native-vector-icons/Feather';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { format } from 'date-fns';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const ScheduleScreen = ({ navigation }) => {
   const [selectedDate, setSelectedDate] = useState('');
@@ -71,6 +75,61 @@ const ScheduleScreen = ({ navigation }) => {
     </View>
   );
 
+  const renderCalendarView = () => {
+    switch (viewMode) {
+      case 'month':
+        return (
+          <Calendar
+            style={styles.calendar}
+            onDayPress={day => setSelectedDate(day.dateString)}
+            markedDates={{
+              [selectedDate]: { selected: true, selectedColor: '#4A90E2' },
+            }}
+          />
+        );
+      case 'week':
+        return (
+          <CalendarList
+            style={styles.calendar}
+            current={selectedDate || format(new Date(), 'yyyy-MM-dd')}
+            pastScrollRange={0}
+            futureScrollRange={1}
+            horizontal={true}
+            pagingEnabled={true}
+            calendarWidth={SCREEN_WIDTH}
+            onDayPress={day => setSelectedDate(day.dateString)}
+            markedDates={{
+              [selectedDate]: { selected: true, selectedColor: '#4A90E2' },
+            }}
+            calendarHeight={300}
+            hideExtraDays={true}
+          />
+        );
+      case 'day':
+        return (
+          <Agenda
+            style={styles.calendar}
+            selected={selectedDate || format(new Date(), 'yyyy-MM-dd')}
+            items={{
+              [selectedDate]: schedules.filter(schedule => 
+                format(schedule.startTime, 'yyyy-MM-dd') === selectedDate
+              )
+            }}
+            renderItem={(item) => (
+              <View style={styles.agendaItem}>
+                <Text style={styles.scheduleTitle}>{item.title}</Text>
+                <Text style={styles.scheduleTime}>
+                  {format(item.startTime, 'HH:mm')} - {format(item.endTime, 'HH:mm')}
+                </Text>
+              </View>
+            )}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -85,13 +144,7 @@ const ScheduleScreen = ({ navigation }) => {
 
       <ViewModeButtons />
 
-      <Calendar
-        style={styles.calendar}
-        onDayPress={day => setSelectedDate(day.dateString)}
-        markedDates={{
-          [selectedDate]: { selected: true, selectedColor: '#4A90E2' },
-        }}
-      />
+      {renderCalendarView()}
 
       <ScrollView style={styles.scheduleList}>
         {schedules.map(schedule => (
@@ -296,6 +349,18 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+  },
+  agendaItem: {
+    backgroundColor: 'white',
+    padding: 15,
+    marginVertical: 5,
+    marginHorizontal: 10,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
 });
 

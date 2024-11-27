@@ -126,7 +126,10 @@ const StudyCommunityScreen = ({ navigation }) => {
           <View>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>멘토링</Text>
-              <Pressable style={styles.createButton}>
+              <Pressable 
+                style={styles.createButton}
+                onPress={() => navigation.navigate('RegisterMentor')}
+              >
                 <Text style={styles.createButtonText}>멘토 등록</Text>
               </Pressable>
             </View>

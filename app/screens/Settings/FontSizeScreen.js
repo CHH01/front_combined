@@ -14,6 +14,12 @@ const FontSizeScreen = () => {
     return '크게';
   };
 
+  const getActualFontSize = (value) => {
+    if (value <= 1.5) return 14;
+    if (value <= 2.5) return 18;
+    return 22;
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -40,7 +46,7 @@ const FontSizeScreen = () => {
           <Text style={styles.sizeLabelLarge}>가</Text>
         </View>
 
-        <Text style={styles.currentSize}>
+        <Text style={[styles.currentSize, { fontSize: getActualFontSize(fontSize) }]}>
           {getFontSizeText(fontSize)}
         </Text>
 
@@ -92,7 +98,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   currentSize: {
-    fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 20,
   },

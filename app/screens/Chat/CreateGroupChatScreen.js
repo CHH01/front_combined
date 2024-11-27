@@ -1,6 +1,6 @@
 // 2.그룹 채팅 생성 페이지
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList, Image } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList, Image, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const CreateGroupChatScreen = ({ navigation }) => {
@@ -28,8 +28,17 @@ const CreateGroupChatScreen = ({ navigation }) => {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>그룹 채팅 생성 페이지</Text>
+        <SafeAreaView style={styles.container}>
+            <View style={styles.header}>
+                <Text style={styles.title}>그룹 채팅 생성 페이지</Text>
+                <TouchableOpacity 
+                    style={styles.closeButton}
+                    onPress={() => navigation.goBack()}
+                >
+                    <Ionicons name="close" size={24} color="#333" />
+                </TouchableOpacity>
+            </View>
+            
             <Text style={styles.label}>채팅방 이름 설정</Text>
             <TextInput
                 style={styles.input}
@@ -61,25 +70,39 @@ const CreateGroupChatScreen = ({ navigation }) => {
             <TouchableOpacity style={styles.createButton} onPress={createGroupChat}>
                 <Text style={styles.buttonText}>그룹 채팅 생성</Text>
             </TouchableOpacity>
-        </View>
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
         backgroundColor: '#fff',
     },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        paddingHorizontal: 20,
+        paddingVertical: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee',
+    },
+    closeButton: {
+        position: 'absolute',
+        right: 20,
+        top: 15,
+    },
     title: {
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: 'bold',
-        marginBottom: 20,
-        textAlign: 'center',
     },
     label: {
         fontSize: 16,
         marginBottom: 5,
+        marginTop: 15,
+        marginHorizontal: 20,
     },
     input: {
         height: 40,
@@ -88,11 +111,13 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         paddingHorizontal: 10,
         marginBottom: 20,
+        marginHorizontal: 20,
     },
     friendItem: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: 10,
+        paddingHorizontal: 20,
         borderBottomWidth: 1,
         borderBottomColor: '#ddd',
     },
@@ -113,6 +138,8 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 5,
         alignItems: 'center',
+        marginHorizontal: 20,
+        marginBottom: 20,
     },
     buttonText: {
         color: '#fff',

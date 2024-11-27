@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 
 const SocialAccountsScreen = () => {
   const navigation = useNavigation();
+  const [connectedAccounts, setConnectedAccounts] = useState({
+    1: true,
+    2: true,
+    3: true,
+  });
+
+  const toggleConnection = (id) => {
+    setConnectedAccounts(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
 
   const socialAccounts = [
     {
@@ -48,8 +60,19 @@ const SocialAccountsScreen = () => {
                 <Text style={styles.platform}>{account.platform}</Text>
               </View>
             </View>
-            <TouchableOpacity style={styles.disconnectButton}>
-              <Text style={styles.disconnectText}>해제</Text>
+            <TouchableOpacity 
+              style={[
+                styles.actionButton, 
+                connectedAccounts[account.id] ? styles.disconnectButton : styles.connectButton
+              ]}
+              onPress={() => toggleConnection(account.id)}
+            >
+              <Text style={[
+                styles.actionText,
+                connectedAccounts[account.id] ? styles.disconnectText : styles.connectText
+              ]}>
+                {connectedAccounts[account.id] ? '해제' : '연동'}
+              </Text>
             </TouchableOpacity>
           </View>
         ))}
@@ -109,15 +132,25 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
   },
-  disconnectButton: {
+  actionButton: {
     paddingVertical: 6,
     paddingHorizontal: 12,
     borderRadius: 4,
+  },
+  disconnectButton: {
     backgroundColor: '#f0f0f0',
   },
-  disconnectText: {
+  connectButton: {
+    backgroundColor: '#007AFF',
+  },
+  actionText: {
     fontSize: 14,
+  },
+  disconnectText: {
     color: '#666',
+  },
+  connectText: {
+    color: '#fff',
   },
 });
 

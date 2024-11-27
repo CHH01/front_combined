@@ -1,19 +1,35 @@
 // 3.파일 공유 페이지 ok
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, FlatList, Modal } from 'react-native';
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  TextInput, 
+  TouchableOpacity, 
+  FlatList, 
+  Modal,
+  Platform,
+  StatusBar,
+  Image,
+  Switch
+} from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
+import { useNavigation } from '@react-navigation/native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const FileShareScreen = () => {
+    const navigation = useNavigation();
     const [searchQuery, setSearchQuery] = useState('');
-    const [files] = useState([
-        { id: '1', name: 'Document1.pdf', type: 'PDF' },
-        { id: '2', name: 'Image1.png', type: 'Image' },
-        { id: '3', name: 'Video1.mp4', type: 'Video' },
-        { id: '4', name: 'hello.mp4', type: 'Video' },
-        // Thêm tệp mẫu ở đây
+    const [files, setFiles] = useState([
+        { id: '1', name: 'Document1.pdf', type: 'PDF', size: '2.5MB', date: '2024-03-15', preview: 'https://example.com/pdf-preview.jpg', isShared: true, expiryDate: null },
+        { id: '2', name: 'Image1.png', type: 'Image', size: '1.8MB', date: '2024-03-14', preview: 'https://example.com/image1-preview.jpg', isShared: true, expiryDate: null },
+        { id: '3', name: 'Video1.mp4', type: 'Video', size: '15.2MB', date: '2024-03-13', preview: 'https://example.com/video-preview.jpg', isShared: false, expiryDate: null },
+        { id: '4', name: 'hello.mp4', type: 'Video', size: '8.7MB', date: '2024-03-12', preview: 'https://example.com/hello-preview.jpg', isShared: true, expiryDate: '2024-04-12' },
     ]);
     const [filteredFiles, setFilteredFiles] = useState(files);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedFile, setSelectedFile] = useState(null);
+    const [showDatePicker, setShowDatePicker] = useState(false);
 
     const filterFiles = (type) => {
         if (type === 'All') {
@@ -25,81 +41,165 @@ const FileShareScreen = () => {
 
     const handleSearch = (query) => {
         setSearchQuery(query);
-        setFilteredFiles(files.filter(file => file.name.includes(query)));
+        setFilteredFiles(files.filter(file => 
+            file.name.toLowerCase().includes(query.toLowerCase())
+        ));
     };
 
-    const downloadFile = (file) => {
-        alert(`${file.name} 다운로드 되었습니다.`);
+    const renderFileIcon = (type) => {
+        switch(type) {
+            case 'PDF':
+                return <Icon name="file-text" size={24} color="#FF5252" />;
+            case 'Image':
+                return <Icon name="image" size={24} color="#4CAF50" />;
+            case 'Video':
+                return <Icon name="video" size={24} color="#2196F3" />;
+            default:
+                return <Icon name="file" size={24} color="#757575" />;
+        }
     };
 
-    const deleteFile = (file) => {
-        alert(`${file.name} 삭제되었습니다.`);
+    const toggleFileSharing = (fileId) => {
+        setFiles(files.map(file => 
+            file.id === fileId ? { ...file, isShared: !file.isShared } : file
+        ));
+        setFilteredFiles(filteredFiles.map(file => 
+            file.id === fileId ? { ...file, isShared: !file.isShared } : file
+        ));
     };
 
-    const previewFile = (file) => {
+    const setFileExpiry = (fileId, date) => {
+        setFiles(files.map(file => 
+            file.id === fileId ? { ...file, expiryDate: date.toISOString().split('T')[0] } : file
+        ));
+        setFilteredFiles(filteredFiles.map(file => 
+            file.id === fileId ? { ...file, expiryDate: date.toISOString().split('T')[0] } : file
+        ));
+        setShowDatePicker(false);
+    };
+
+    const openFilePreview = (file) => {
         setSelectedFile(file);
         setModalVisible(true);
     };
 
+    const handleFileItemPress = (file) => {
+        openFilePreview(file);
+    };
+
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>파일 및 미디어 공유 페이지</Text>
-            <TextInput
-                style={styles.searchInput}
-                placeholder="파일 검색"
-                value={searchQuery}
-                onChangeText={handleSearch}
-            />
-            <View style={styles.filterContainer}>
-                <TouchableOpacity onPress={() => filterFiles('All')} style={styles.filterButton}>
-                    <Text style={styles.filterText}>모두</Text>
+            <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+            <View style={styles.header}>
+                <TouchableOpacity 
+                    onPress={() => navigation.goBack()}
+                    style={styles.backButton}
+                >
+                    <Icon name="arrow-left" size={24} color="#333" />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => filterFiles('PDF')} style={styles.filterButton}>
-                    <Text style={styles.filterText}>PDF</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => filterFiles('Image')} style={styles.filterButton}>
-                    <Text style={styles.filterText}>이미지</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => filterFiles('Video')} style={styles.filterButton}>
-                    <Text style={styles.filterText}>비디오</Text>
-                </TouchableOpacity>
+                <Text style={styles.title}>공유 파일</Text>
+                <View style={{ width: 24 }} />
             </View>
+
+            <View style={styles.searchContainer}>
+                <Icon name="search" size={20} color="#666" />
+                <TextInput
+                    style={styles.searchInput}
+                    placeholder="파일 검색"
+                    value={searchQuery}
+                    onChangeText={handleSearch}
+                />
+            </View>
+
+            <View style={styles.filterContainer}>
+                {['All', 'PDF', 'Image', 'Video'].map((type) => (
+                    <TouchableOpacity 
+                        key={type}
+                        onPress={() => filterFiles(type)} 
+                        style={styles.filterButton}
+                    >
+                        <Text style={styles.filterText}>
+                            {type === 'All' ? '전체' : type}
+                        </Text>
+                    </TouchableOpacity>
+                ))}
+            </View>
+
             <FlatList
                 data={filteredFiles}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                     <View style={styles.fileItem}>
-                        <Text style={styles.fileName}>{item.name}</Text>
+                        <TouchableOpacity 
+                            style={styles.fileInfo}
+                            onPress={() => handleFileItemPress(item)}
+                        >
+                            {renderFileIcon(item.type)}
+                            <View style={styles.fileDetails}>
+                                <Text style={styles.fileName}>{item.name}</Text>
+                                <Text style={styles.fileMetadata}>
+                                    {item.size} • {item.date}
+                                </Text>
+                                {item.expiryDate && (
+                                    <Text style={styles.expiryDate}>만료: {item.expiryDate}</Text>
+                                )}
+                            </View>
+                        </TouchableOpacity>
                         <View style={styles.fileActions}>
-                            <TouchableOpacity onPress={() => downloadFile(item)}>
-                                <Text style={styles.actionText}>다운로드</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => deleteFile(item)}>
-                                <Text style={styles.actionText}>삭제</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => previewFile(item)}>
-                                <Text style={styles.actionText}>미리보기</Text>
+                            <Switch
+                                value={item.isShared}
+                                onValueChange={() => toggleFileSharing(item.id)}
+                            />
+                            <TouchableOpacity 
+                                onPress={() => {
+                                    setSelectedFile(item);
+                                    setShowDatePicker(true);
+                                }}
+                                style={styles.actionButton}
+                            >
+                                <Icon name="clock" size={20} color="#4A90E2" />
                             </TouchableOpacity>
                         </View>
                     </View>
                 )}
+                style={styles.fileList}
             />
+
             <Modal
                 animationType="slide"
                 transparent={true}
                 visible={modalVisible}
                 onRequestClose={() => setModalVisible(false)}
             >
-                <View style={styles.modalView}>
-                    <Text style={styles.modalText}>미리보기: {selectedFile?.name}</Text>
-                    <TouchableOpacity
-                        style={styles.closeButton}
-                        onPress={() => setModalVisible(false)}
-                    >
-                        <Text style={styles.buttonText}>닫기</Text>
-                    </TouchableOpacity>
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalContent}>
+                        <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
+                            <Icon name="x" size={24} color="#333" />
+                        </TouchableOpacity>
+                        {selectedFile && (
+                            <>
+                                <Image source={{ uri: selectedFile.preview }} style={styles.previewImage} />
+                                <Text style={styles.fileName}>{selectedFile.name}</Text>
+                                <Text style={styles.fileMetadata}>
+                                    {selectedFile.size} • {selectedFile.date}
+                                </Text>
+                            </>
+                        )}
+                    </View>
                 </View>
             </Modal>
+
+            {showDatePicker && (
+                <DateTimePicker
+                    value={new Date()}
+                    mode="date"
+                    display="default"
+                    onChange={(event, date) => {
+                        if (date) setFileExpiry(selectedFile.id, date);
+                        setShowDatePicker(false);
+                    }}
+                />
+            )}
         </View>
     );
 };
@@ -107,80 +207,125 @@ const FileShareScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
         backgroundColor: '#fff',
     },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee',
+        backgroundColor: '#fff',
+        ...Platform.select({
+            ios: {
+                paddingTop: 44,
+            },
+            android: {
+                paddingTop: StatusBar.currentHeight,
+            },
+        }),
+    },
+    backButton: {
+        padding: 8,
+    },
     title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-        textAlign: 'center',
+        fontSize: 18,
+        fontWeight: '600',
+    },
+    searchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 12,
+        backgroundColor: '#f5f5f5',
+        marginHorizontal: 16,
+        marginVertical: 12,
+        borderRadius: 8,
     },
     searchInput: {
-        height: 40,
-        borderColor: '#ddd',
-        borderWidth: 1,
-        borderRadius: 5,
-        paddingHorizontal: 10,
-        marginBottom: 20,
+        flex: 1,
+        marginLeft: 8,
+        fontSize: 16,
     },
     filterContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 20,
+        paddingHorizontal: 16,
+        paddingBottom: 12,
     },
     filterButton: {
-        padding: 10,
+        paddingHorizontal: 16,
+        paddingVertical: 8,
         backgroundColor: '#4A90E2',
-        borderRadius: 5,
+        borderRadius: 20,
+        marginRight: 8,
     },
     filterText: {
         color: '#fff',
+        fontWeight: '500',
+    },
+    fileList: {
+        flex: 1,
     },
     fileItem: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingVertical: 10,
+        padding: 16,
         borderBottomWidth: 1,
-        borderBottomColor: '#ddd',
+        borderBottomColor: '#eee',
+    },
+    fileInfo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        flex: 1,
+    },
+    fileDetails: {
+        marginLeft: 12,
+        flex: 1,
     },
     fileName: {
         fontSize: 16,
+        fontWeight: '500',
+        marginBottom: 4,
+    },
+    fileMetadata: {
+        fontSize: 14,
+        color: '#666',
     },
     fileActions: {
         flexDirection: 'row',
-    },
-    actionText: {
-        marginLeft: 10,
-        color: '#4A90E2',
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 35,
         alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
     },
-    modalText: {
-        marginBottom: 15,
-        textAlign: 'center',
+    actionButton: {
+        padding: 8,
+        marginLeft: 8,
+    },
+    expiryDate: {
+        fontSize: 12,
+        color: '#FF5252',
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: '#fff',
+        padding: 20,
+        borderRadius: 10,
+        alignItems: 'center',
     },
     closeButton: {
-        backgroundColor: '#4A90E2',
-        borderRadius: 5,
+        alignSelf: 'flex-end',
         padding: 10,
     },
-    buttonText: {
-        color: '#fff',
+    previewImage: {
+        width: 200,
+        height: 200,
+        resizeMode: 'contain',
+        marginBottom: 10,
     },
 });
 

@@ -52,7 +52,10 @@ const PersonalStudyDashboardScreen = () => {
 
       {/* 레벨 & 연속학습 카드 */}
       <View style={styles.progressCard}>
-        <View style={styles.levelSection}>
+        <Pressable 
+          style={styles.levelSection} 
+          onPress={() => navigation.navigate('LevelDetail')}
+        >
           <Text style={styles.levelTitle}>현재 레벨</Text>
           <View style={styles.levelValueContainer}>
             <Text style={styles.levelValue}>5</Text>
@@ -62,7 +65,7 @@ const PersonalStudyDashboardScreen = () => {
             {/* 프로그레스 바 구현 */}
           </View>
           <Text style={styles.levelSubtext}>다음 레벨까지 230XP</Text>
-        </View>
+        </Pressable>
         <View style={styles.streakSection}>
           <Text style={styles.streakTitle}>연속 학습</Text>
           <View style={styles.streakValueContainer}>
@@ -160,7 +163,7 @@ const PersonalStudyDashboardScreen = () => {
           <Icon name="chevron-right" size={20} color="#666" />
         </Pressable>
 
-        <Pressable style={styles.menuItem}>
+        <Pressable style={styles.menuItem} onPress={() => navigation.navigate('Achievement')}>
           <Text style={styles.menuTitle}>성취 뱃지</Text>
           <Text style={styles.menuSubtitle}>20개의 뱃지를 획득했어요</Text>
           <Icon name="chevron-right" size={20} color="#666" />

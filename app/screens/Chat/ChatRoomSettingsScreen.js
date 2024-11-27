@@ -9,11 +9,23 @@ import {
   Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
+import ChangeNameModal from '../../components/modals/ChangeNameModal';
 
 const ChatRoomSettingsScreen = ({ navigation, route }) => {
   const [notification, setNotification] = useState(true);
   const [encryption, setEncryption] = useState(true);
   const [theme, setTheme] = useState('light');
+  const [showNameModal, setShowNameModal] = useState(false);
+  const [newRoomName, setNewRoomName] = useState('');
+  const [roomName, setRoomName] = useState('알고리즘 스터디');
+
+  const handleChangeRoomName = () => {
+    if (newRoomName.trim()) {
+      setRoomName(newRoomName.trim());
+      setNewRoomName('');
+      setShowNameModal(false);
+    }
+  };
 
   const handleLeaveChat = () => {
     Alert.alert(
@@ -49,15 +61,24 @@ const ChatRoomSettingsScreen = ({ navigation, route }) => {
       <ScrollView>
         {/* 채팅방 정보 섹션 */}
         <View style={styles.section}>
-          <Pressable style={styles.settingItem}>
+          <Pressable 
+            style={styles.settingItem}
+            onPress={() => setShowNameModal(true)}
+          >
             <View style={styles.settingLeft}>
               <Icon name="edit-2" size={20} color="#333" />
               <Text style={styles.settingText}>채팅방 이름 변경</Text>
             </View>
-            <Icon name="chevron-right" size={20} color="#666" />
+            <View style={styles.settingRight}>
+              <Text style={styles.roomName} numberOfLines={1}>{roomName}</Text>
+              <Icon name="chevron-right" size={20} color="#666" />
+            </View>
           </Pressable>
 
-          <Pressable style={styles.settingItem}>
+          <Pressable 
+            style={styles.settingItem}
+            onPress={() => navigation.navigate('ChatRoomMembers')}
+          >
             <View style={styles.settingLeft}>
               <Icon name="users" size={20} color="#333" />
               <Text style={styles.settingText}>참여자 관리</Text>
@@ -66,7 +87,6 @@ const ChatRoomSettingsScreen = ({ navigation, route }) => {
           </Pressable>
         </View>
 
-        {/* 알림 및 테마 섹션 */}
         <View style={styles.section}>
           <View style={styles.settingItem}>
             <View style={styles.settingLeft}>
@@ -80,7 +100,10 @@ const ChatRoomSettingsScreen = ({ navigation, route }) => {
             />
           </View>
 
-          <Pressable style={styles.settingItem}>
+          <Pressable 
+            style={styles.settingItem}
+            onPress={() => navigation.navigate('ChatRoomDisplayMode')}
+          >
             <View style={styles.settingLeft}>
               <Icon name="layout" size={20} color="#333" />
               <Text style={styles.settingText}>테마 설정</Text>
@@ -89,7 +112,6 @@ const ChatRoomSettingsScreen = ({ navigation, route }) => {
           </Pressable>
         </View>
 
-        {/* 보안 및 백업 섹션 */}
         <View style={styles.section}>
           <View style={styles.settingItem}>
             <View style={styles.settingLeft}>
@@ -103,10 +125,24 @@ const ChatRoomSettingsScreen = ({ navigation, route }) => {
             />
           </View>
 
-          <Pressable style={styles.settingItem}>
+          <Pressable 
+            style={styles.settingItem}
+            onPress={() => navigation.navigate('ChatBackupRestore')}
+          >
             <View style={styles.settingLeft}>
               <Icon name="save" size={20} color="#333" />
               <Text style={styles.settingText}>채팅 백업 및 복원</Text>
+            </View>
+            <Icon name="chevron-right" size={20} color="#666" />
+          </Pressable>
+
+          <Pressable 
+            style={styles.settingItem}
+            onPress={() => navigation.navigate('FileShare')}
+          >
+            <View style={styles.settingLeft}>
+              <Icon name="file" size={20} color="#333" />
+              <Text style={styles.settingText}>공유 파일</Text>
             </View>
             <Icon name="chevron-right" size={20} color="#666" />
           </Pressable>
@@ -123,6 +159,19 @@ const ChatRoomSettingsScreen = ({ navigation, route }) => {
           </View>
         </Pressable>
       </ScrollView>
+
+      <ChangeNameModal
+        visible={showNameModal}
+        onClose={() => {
+          setNewRoomName('');
+          setShowNameModal(false);
+        }}
+        onSubmit={handleChangeRoomName}
+        value={newRoomName}
+        onChange={setNewRoomName}
+        title="채팅방 이름 변경"
+        placeholder="새로운 채팅방 이름 입력"
+      />
     </View>
   );
 };
@@ -177,6 +226,18 @@ const styles = StyleSheet.create({
   },
   leaveText: {
     color: '#FF3B30',
+  },
+  settingRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  roomName: {
+    fontSize: 14,
+    color: '#666',
+    marginRight: 10,
+    maxWidth: 150, // 긴 이름이 UI를 깨지지 않도록 최대 너비 설정
   },
 });
 
